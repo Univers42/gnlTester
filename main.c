@@ -3,32 +3,40 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <string.h>
 #include "../get_next_line.h"
 #include "test_utils.h"
-
+#define RED "\033[1;31m"
+#define GREEN "\033[1;32m"
+#define RESET "\033[0m"
+#define BLUE "\033[1;34m"
+#define YELLOW "\033[1;33m"
+#define CYAN "\033[1;36m"
+#define MAGENTA "\033[1;35m"
+#define WHITE "\033[1;37m"
+#define new_line "\n"
 void display_start_message() {
-    printf("\033[1;34m"); // Set text color to blue
-    printf("  _____          _   _           _     _             \n");
-    printf(" |_   _|        | | | |         | |   (_)            \n");
-    printf("   | | _ __  ___| |_| |__   __ _| |__  _ _ __   __ _ \n");
-    printf("   | || '_ \\/ __| __| '_ \\ / _` | '_ \\| | '_ \\ / _` |\n");
-    printf("  _| || | | \\__ \\ |_| | | | (_| | | | | | | | | (_| |\n");
-    printf("  \\___/_| |_|___/\\__|_| |_|\\__,_|_| |_|_|_| |_|\\__, |\n");
-    printf("                                                __/ |\n");
-    printf("                                               |___/ \n");
-    printf("\033[0m"); // Reset text color
+    printf(YELLOW"_   .-')       ('-.          .-') _   _ .-') _      ('-.      .-') _                  _  .-')                 "new_line);
+    printf(CYAN"( '.( OO )_    ( OO ).-.     ( OO ) ) ( (  OO) )    ( OO ).-. (  OO) )                ( \\( -O )                "new_line);
+    printf(" ,--.   ,--.)  / . --. / ,--./ ,--,'   \\     .'_    / . --. / /     '._   .-'),-----.  ,------.    ,--.   ,--."new_line);
+    printf(" |   `.'   |   | \\-.  \\  |   \\ |  |\\   ,`'--..._)   | \\-.  \\  |'--...__) ( OO'  .-.  ' |   /`. '    \\  `.'  / "new_line);
+    printf(" |         | .-'-'  |  | |    \\|  | )  |  |  \\  ' .-'-'  |  | '--.  .--' /   |  | |  | |  /  | |  .-')     /  "new_line);
+    printf(" |  |'.'|  |  \\| |_.'  | |  .     |/   |  |   ' |  \\| |_.'  |    |  |    \\_) |  |\\|  | |  |_.' | (OO  \\   /   "new_line);
+    printf(" |  |   |  |   |  .-.  | |  |\\    |    |  |   / :   |  .-.  |    |  |      \\ |  | |  | |  .  '.'  |   /  /\\_  "new_line);
+    printf(" |  |   |  |   |  | |  | |  | \\   |    |  '--'  /   |  | |  |    |  |       `'  '-'  ' |  |\\  \\   `-./  /.__) "new_line);
+    printf(BLUE" `--'   `--'   `--' `--' `--'  `--'    `-------'    `--' `--'    `--'         `-----'  `--' '--'    `--'      "new_line RESET);
 }
 
 void display_success_message() {
-    printf("\033[1;32m"); // Set text color to green
+    printf(YELLOW); // Set text color to green
     printf("\n");
     printf("     ✨ All Tests Passed! ✨\n");
     printf("\n");
     printf("         .-=========-.       \n");
     printf("         \\'-=======-'/       \n");
     printf("         _|   .=.   |_       \n");
-    printf("        ((|  {{1}}  |))      \n");
-    printf("         \\|   /|\\   |/       \n");
+    printf(GREEN"        ((|  {{1}}  |))      \n");
+    printf(YELLOW"         \\|   /|\\   |/       \n");
     printf("          \\__ '`' __/        \n");
     printf("            _`) (`_          \n");
     printf("          _/_______\\_        \n");
@@ -70,34 +78,39 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     }
 
     FILE *output = fopen("outputs/temp_output.txt", "w");
-    if (!output) {
+    if (!output)
+    {
         close(fd);
         *all_tests_passed = false;
         if (detailed) printf("❌ Error opening output file\n");
         return;
     }
-
     char *line;
     while ((line = get_next_line(fd)) != NULL)
     {
-        fprintf(output, "%s", line); // Write the line to the output file
+        fprintf(output, "%s", line); // Remove the extra newline character
         free(line);
     }
-
     fclose(output);
     close(fd);
 
-    if (compare_files("outputs/temp_output.txt", expected_output_file)) {
-        if (detailed) printf("✅ %s matches %s\n", filename, expected_output_file);
-    } else {
+    if (compare_files("outputs/temp_output.txt", expected_output_file))
+    {
+        if (detailed) 
+            printf("✅ %s matches %s\n", filename, expected_output_file);
+    } 
+    else 
+    {
         *all_tests_passed = false;
-        if (detailed) printf("❌ %s does not match %s\n", filename, expected_output_file);
+        if (detailed)
+            printf("❌ %s does not match %s\n", filename, expected_output_file);
     }
 }
 
 void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool detailed)
 {
-    if (detailed) printf("\nRunning tests with BUFFER_SIZE = %zu\n", buffer_size);
+    if (detailed)
+        printf("\nRunning tests with BUFFER_SIZE = %zu\n", buffer_size);
     const char *test_files[][2] = {
         {"test_cases/empty.txt", "expected_output/empty.txt"},
         {"test_cases/one_line.txt", "expected_output/one_line.txt"},
@@ -107,11 +120,16 @@ void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool
         {"test_cases/1char.txt", "expected_output/1char.txt"},
         {"test_cases/41_no_nl", "expected_output/41_no_nl"},
         {"test_cases/41_no_nl copy 2", "expected_output/41_no_nl copy 2"},
+        //{"test_cases/41_no_nl copy3", "expected_output/41_no_nl copy3"},
         {"test_cases/41_with_nl", "expected_output/41_with_nl"},
         {"test_cases/42_no_nl", "expected_output/42_no_nl"},
         {"test_cases/42_with_nl", "expected_output/42_with_nl"},
         {"test_cases/43_no_nl", "expected_output/43_no_nl"},
+        //{"test_cases/43_no_nl_copy", "expected_output/43_no_nl_copy"},
         {"test_cases/43_with_nl", "expected_output/43_with_nl"},
+        //{"test_cases/alternate_line_nl_no_nl", "expected_output/alternate_line_nl_no_nl"},
+        //{"test_cases/alternate_line_with_nl", "expected_output/alternate_line_with_nl"},
+        //{"test_cases/big_line_no_nl.txt", "expected_output/big_line_no_nl.txt"},
         {"test_cases/big_line_with_nl", "expected_output/big_line_with_nl"},
         {"test_cases/empty.txt", "expected_output/empty.txt"},
         {"test_cases/empty.txt", "expected_output/empty.txt"},
@@ -141,43 +159,31 @@ void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool
         {"test_cases/11-bg.txt", "expected_output/11-bg.txt"},
         {"test_cases/12-bigben.txt", "expected_output/12-bigben.txt"},
     };
-
     size_t num_tests = sizeof(test_files) / sizeof(test_files[0]);
-
-    for (size_t i = 0; i < num_tests; i++) {
+    for (size_t i = 0; i < num_tests; i++)
         test_file(test_files[i][0], test_files[i][1], all_tests_passed, detailed);
-    }
 }
 
 int main(void)
 {
     char choice[10];
     bool detailed = true;
+    size_t buffer_sizes[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
+    size_t num_buffer_sizes;
+    bool all_tests_passed;
 
     printf("Choose output type (detailed/short): ");
     scanf("%9s", choice);
-
-    if (strcmp(choice, "short") == 0) {
+    if (strcmp(choice, "short") == 0)
         detailed = false;
-    }
-
     display_start_message();
-
-    size_t buffer_sizes[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
-
-    size_t num_buffer_sizes = sizeof(buffer_sizes) / sizeof(buffer_sizes[0]);
-
-    bool all_tests_passed = true;
-
-    for (size_t i = 0; i < num_buffer_sizes; i++) {
+    num_buffer_sizes = sizeof(buffer_sizes) / sizeof(buffer_sizes[0]);
+    all_tests_passed = true;
+    for (size_t i = 0; i < num_buffer_sizes; i++)
         run_tests_with_buffer_size(buffer_sizes[i], &all_tests_passed, detailed);
-    }
-
-    if (all_tests_passed) {
+    if (all_tests_passed)
         display_success_message();
-    } else {
+    else
         display_failure_message();
-    }
-
     return 0;
 }
