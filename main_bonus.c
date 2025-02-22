@@ -28,14 +28,14 @@ void display_start_message() {
 }
 
 void display_success_message() {
-    printf("\033[1;32m"); // Set text color to green
+    printf(YELLOW); // Set text color to green
     printf("\n");
     printf("     ✨ All Tests Passed! ✨\n");
     printf("\n");
     printf("         .-=========-.       \n");
     printf("         \\'-=======-'/       \n");
     printf("         _|   .=.   |_       \n");
-    printf("        ((|  {{1}}  |))      \n");
+    printf("        ((|"  GREEN"  {{1}}" YELLOW "  |))      \n");
     printf("         \\|   /|\\   |/       \n");
     printf("          \\__ '`' __/        \n");
     printf("            _`) (`_          \n");
@@ -44,7 +44,7 @@ void display_success_message() {
     printf("\n");
     printf("    🎉 Success Trophy 🎉     \n");
     printf("\n");
-    printf("\033[0m"); // Reset text color
+    printf(RESET); // Reset text color
 }
 
 void display_failure_message() {
@@ -86,7 +86,7 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     }
 
     char *line;
-    while ((line = get_next_line_bonus(fd)) != NULL)
+    while ((line = get_next_line(fd)) != NULL)
     {
         fprintf(output, "%s", line); // Write the line to the output file
         free(line);
@@ -178,7 +178,7 @@ void test_multiple_fds()
         {
             if (fds[i] == -1) continue;
 
-            line = get_next_line_bonus(fds[i]);
+            line = get_next_line(fds[i]);
             total_tests++;
 
             if (line)
