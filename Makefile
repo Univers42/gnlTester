@@ -16,13 +16,6 @@ tester_bonus: main_bonus.o test_utils.o $(GNL_BONUS_SRCS:.c=.o)
 	$(CC) $(CFLAGS) -o tester_bonus main_bonus.o test_utils.o $(GNL_BONUS_SRCS:.c=.o)
 
 run_tests: tester tester_bonus
-	@echo "  |_   _|        | | | |         | |   (_)            "
-	@echo "    | | _ __  ___| |_| |__   __ _| |__  _ _ __   __ _ "
-	@echo "    | || '_ \\/ __| __| '_ \\ / _\` | '_ \\| | '_ \\ / _\` |"
-	@echo "  _| || | | \\__ \\ |_| | | | (_| | | | | | | | | (_| |"
-	@echo "  \\___/_| |_|___/\\__|_| |_|\\__,_|_| |_|_|_| |_|\\__, |"
-	@echo "                                                __/ |"
-	@echo "                                               |___/ "
 	@for size in $(BUFFER_SIZES); do \
 		echo ""; \
 		echo "Running tests with BUFFER_SIZE = $$size"; \
@@ -31,21 +24,6 @@ run_tests: tester tester_bonus
 		$(CC) $(CFLAGS) -DBUFFER_SIZE=$$size -o tester_bonus main_bonus.o test_utils.o $(GNL_BONUS_SRCS:.c=.o); \
 		./tester_bonus; \
 	done
-	@echo ""
-	@echo "     ✨ All Tests Passed! ✨"
-	@echo ""
-	@echo "         .-=========-.       "
-	@echo "         \\'-=======-'/       "
-	@echo "         _|   .=.   |_       "
-	@echo "        ((|  {{1}}  |))      "
-	@echo "         \\|   /|\\   |/       "
-	@echo "          \\__ '`' __/        "
-	@echo "            _`) (`_          "
-	@echo "          _/_______\\_        "
-	@echo "         /___________\\       "
-	@echo ""
-	@echo "    🎉 Success Trophy 🎉     "
-	@echo ""
 
 clean:
 	rm -f *.o tester tester_bonus
