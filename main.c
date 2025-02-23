@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <stdbool.h>
 #include <string.h>
 #include "../get_next_line.h"
@@ -164,6 +165,52 @@ void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool
         test_file(test_files[i][0], test_files[i][1], all_tests_passed, detailed);
 }
 
+#define CYBER1  "\033[38;5;45m"  // Electric Blue
+#define CYBER2  "\033[38;5;201m" // Neon Pink
+#define CYBER3  "\033[38;5;47m"  // Toxic Green
+#define CYBER4  "\033[38;5;220m" // Holographic Yellow
+#define CLEAR_SCREEN "\033[H\033[J"
+
+bool stop_animation = false;
+
+void *buffering_animation() {
+    const char *frames[][2] = {
+        {BLUE   "  ◢█◣  \n ◢████◣ \n◢██████◣\n◥██████◤\n ◥████◤ \n  ◥█◤  " RESET, "Booting up..."},
+        {CYAN   "  ◢█◣  \n ◢██◤█◣ \n◢██◤◢██◣\n◥██◣◥██◤\n ◥█◣█◤ \n  ◥█◤  " RESET, "Calibrating systems..."},
+        {GREEN  "  ◢█◣  \n ◢█◤◢█◣ \n◢█◤◢███◣\n◥█◣◥███◤\n ◥█◣◥█◤ \n  ◥█◤  " RESET, "Processing requests..."},
+        {MAGENTA "  ◢█◣  \n ◢◤◢██◣ \n◢◤◢████◣\n◥◣◥████◤\n ◥◣◥██◤ \n  ◥█◤  " RESET, "Finalizing..."},
+        {YELLOW "  ◢█◣  \n ◢████◣ \n◢██████◣\n◥██████◤\n ◥████◤ \n  ◥█◤  " RESET, "Almost there..."},
+        {RED    "  ◢█◣  \n ◢████◣ \n◢██████◣\n◥██████◤\n ◥████◤ \n  ◥█◤  " RESET, "COMPLETE! 🚀"},
+    };
+
+    int num_frames = sizeof(frames) / sizeof(frames[0]);
+    int i = 0;
+
+    while (!stop_animation) {
+        printf("\033[H\033[J");  // Clear screen
+        printf("\033[1;1H");     // Move cursor to top-left
+        printf("%s\n%s\n", frames[i % num_frames][0], frames[i % num_frames][1]);
+        fflush(stdout);
+        i++;
+        usleep(200000);  // Sleep for 200ms
+    }
+
+    printf("\033[H\033[J");  // Clear screen after animation ends
+    printf(GREEN "✔ Process Completed Successfully!\n" RESET);
+    return NULL;
+}
+
+// Start animation in a separate thread
+void start_animation() {
+    pthread_t animation_thread;
+    pthread_create(&animation_thread, NULL, buffering_animation, NULL);
+}
+
+// Stop animation
+void stop_animation_func() {
+    stop_animation = true;
+}
+
 int main(void)
 {
     char choice[10];
@@ -179,8 +226,20 @@ int main(void)
     display_start_message();
     num_buffer_sizes = sizeof(buffer_sizes) / sizeof(buffer_sizes[0]);
     all_tests_passed = true;
+
+    pthread_t animation_thread;
+    if (!detailed) {
+        pthread_create(&animation_thread, NULL, buffering_animation, NULL);
+    }
+
     for (size_t i = 0; i < num_buffer_sizes; i++)
         run_tests_with_buffer_size(buffer_sizes[i], &all_tests_passed, detailed);
+
+    if (!detailed) {
+        stop_animation = true;
+        pthread_join(animation_thread, NULL);
+    }
+
     if (all_tests_passed)
         display_success_message();
     else

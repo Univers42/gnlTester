@@ -96,10 +96,14 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     close(fd);
 
     if (compare_files("outputs/temp_output.txt", expected_output_file)) {
-        if (detailed) printf("✅ %s matches %s\n", filename, expected_output_file);
+        if (detailed) {
+            printf(GREEN "✅ %s matches %s\n" RESET, filename, expected_output_file);
+        }
     } else {
         *all_tests_passed = false;
-        if (detailed) printf("❌ %s does not match %s\n", filename, expected_output_file);
+        if (detailed) {
+            printf(RED "❌ %s does not match %s\n" RESET, filename, expected_output_file);
+        }
     }
 }
 
