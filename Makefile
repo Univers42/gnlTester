@@ -60,7 +60,7 @@ run_tests: tester tester_bonus
 		$(CC) $(CFLAGS) -DBUFFER_SIZE=$$size -o tester_bonus main_bonus.o test_utils.o $(GNL_BONUS_SRCS:.c=.o); \
 		./tester_bonus; \
 	done
-
+	
 header:
 	@printf "\033[0;32mBuilding Project...\033[m\n"
 
