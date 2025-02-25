@@ -240,7 +240,7 @@ void test_multiple_fds()
     printf("Total tests run: %d\n", total_tests);
     printf("%sTests passed  : %d%s\n", GREEN, passed_tests, RESET);
     printf("%sTests failed  : %d%s\n", RED, failed_tests, RESET);
-    printf("Success rate  : %.2f%%\n", (total_tests > 0) ? (float)passed_tests / total_tests * 100 : 0);
+    printf("Success rate  : %.2lf%%\n", (total_tests > 0) ? (double)passed_tests / total_tests * 100 : 0);
 }
 
 void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool detailed)
@@ -296,14 +296,16 @@ void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool
         test_file(test_files[i][0], test_files[i][1], all_tests_passed, detailed);
     }
 }
-
 int main(void)
 {
     char choice[10];
     bool detailed = true;
 
     printf("Choose output type (detailed/short): ");
-    scanf("%9s", choice);
+    if (scanf("%9s", choice) != 1) {
+        fprintf(stderr, "Error: Failed to read user input.\n");
+        return 1;
+    }
 
     if (strcmp(choice, "short") == 0) {
         detailed = false;

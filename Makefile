@@ -1,6 +1,10 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -fsanitize=leak -pedantic
-
+CFLAGS = -Wall -Wextra -Werror -pedantic \
+         -g -O2 -fno-omit-frame-pointer \
+         -fsanitize=address,undefined,leak \
+         -fsanitize-recover=address,undefined \
+         -D_FORTIFY_SOURCE=2 -Wshadow -Wconversion -Wdouble-promotion
+#CFLAGS = -Wall -Wextra -Werror
 GNL_PATH = ../
 GNL_SRCS = $(GNL_PATH)get_next_line.c $(GNL_PATH)get_next_line_utils.c
 GNL_BONUS_SRCS = $(GNL_PATH)get_next_line_bonus.c $(GNL_PATH)get_next_line_utils_bonus.c

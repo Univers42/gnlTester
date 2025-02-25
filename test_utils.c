@@ -19,8 +19,8 @@ int compare_files(const char *file1, const char *file2) {
         return 0;
     }
 
-    char ch1 = getc(f1);
-    char ch2 = getc(f2);
+    int ch1 = getc(f1);
+    int ch2 = getc(f2);
     int pos = 0;
 
     while (ch1 != EOF && ch2 != EOF) {

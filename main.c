@@ -211,7 +211,7 @@ void stop_animation_func() {
     stop_animation = true;
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
     char choice[10];
     bool detailed = true;
@@ -219,10 +219,20 @@ int main(void)
     size_t num_buffer_sizes;
     bool all_tests_passed;
 
-    printf("Choose output type (detailed/short): ");
-    scanf("%9s", choice);
+    if(argc != 2)
+    {
+        fprintf(stderr, "./usage [detailed/short]");
+        return (1);
+    }
+    strcpy(choice, argv[1]);
+    //printf("Choose output type (detailed/short): ");
+    //scanf("%9s", choice);
     if (strcmp(choice, "short") == 0)
         detailed = false;
+    else if(strcmp(choice, "detailed") == 0)
+        detailed = true;
+    else
+        return (fprintf(stderr, "./usage [detailed/short]"), 1);
     display_start_message();
     num_buffer_sizes = sizeof(buffer_sizes) / sizeof(buffer_sizes[0]);
     all_tests_passed = true;
