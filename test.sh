@@ -3,7 +3,7 @@ echo "🔍 Running tests..."
 
 make re
 mkdir -p logs outputs test_cases expected_output
-
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --errors-for-leak-kinds=all --log-file=valgrind_log.txt ./a.out
 # Create dummy test files if they don't exist
 echo -n "" > test_cases/empty.txt
 echo "This is a single line." > test_cases/one_line.txt
