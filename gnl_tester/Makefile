@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/02/27 20:41:02 by dyl-syzygy        #+#    #+#              #
+#    Updated: 2025/02/27 20:41:03 by dyl-syzygy       ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 ################################################################################
 #                                     CONFIG                                   #
 ################################################################################
@@ -58,6 +70,9 @@ WARN_COLOR  = \033[0;33m
 NO_COLOR    = \033[m
 BOLD        = \033[1m
 
+# Update LDFLAGS to include math library
+LDFLAGS = -pthread -lm
+
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
@@ -69,7 +84,9 @@ GNL_SRCS = $(GNL_PATH)get_next_line.c $(GNL_PATH)get_next_line_utils.c
 GNL_BONUS_SRCS = $(GNL_PATH)get_next_line_bonus.c $(GNL_PATH)get_next_line_utils_bonus.c
 
 # Helper source files in helpers/ directory
-HELPER_SRCS = helpers/test_files.c helpers/globals.c helpers/cosmetics_utils.c helpers/test_utils.c helpers/gnl_wrapper.c helpers/logging.c helpers/memory_validate.c
+HELPER_SRCS = helpers/test_files.c helpers/globals.c helpers/cosmetics_utils.c \
+              helpers/test_utils.c helpers/gnl_wrapper.c helpers/logging.c \
+              helpers/memory_validate.c helpers/benchmarking.c
 
 ################################################################################
 #                                  OBJECT FILES                               #
@@ -105,9 +122,9 @@ init:
 # Simple, reliable build without animations
 simple_build: init $(OBJS) $(OBJS_BONUS)
 	@printf "$(OK_COLOR)[Building]$(NO_COLOR) Linking tester executable...\n"
-	@$(CC) $(CFLAGS) -o tester $(OBJS)
+	@$(CC) $(CFLAGS) -o tester $(OBJS) $(LDFLAGS)
 	@printf "$(OK_COLOR)[Building]$(NO_COLOR) Linking tester_bonus executable...\n"
-	@$(CC) $(CFLAGS) -o tester_bonus $(OBJS_BONUS)
+	@$(CC) $(CFLAGS) -o tester_bonus $(OBJS_BONUS) $(LDFLAGS)
 	@printf "$(OK_COLOR)[Success]$(NO_COLOR) Build completed successfully!\n"
 	@printf "\n$(OK_COLOR)╔═════════════════════════════════════════════════╗$(NO_COLOR)\n"
 	@printf "$(OK_COLOR)║  ██████╗  ██████╗ ███╗   ██╗███████╗██╗         ║$(NO_COLOR)\n"
@@ -155,18 +172,18 @@ run_tests: tester tester_bonus
 	@for size in $(BUFFER_SIZES); do \
 		echo ""; \
 		echo "Running tests with BUFFER_SIZE = $$size"; \
-		$(CC) $(CFLAGS) -DBUFFER_SIZE=$$size -o tester $(MAIN_OBJ) $(HELPER_OBJS) $(GNL_OBJS); \
+		$(CC) $(CFLAGS) -DBUFFER_SIZE=$$size -o tester $(MAIN_OBJ) $(HELPER_OBJS) $(GNL_OBJS) $(LDFLAGS); \
 		./tester; \
-		$(CC) $(CFLAGS) -DBUFFER_SIZE=$$size -o tester_bonus $(MAIN_BONUS_OBJ) $(HELPER_OBJS) $(GNL_BONUS_OBJS); \
+		$(CC) $(CFLAGS) -DBUFFER_SIZE=$$size -o tester_bonus $(MAIN_BONUS_OBJ) $(HELPER_OBJS) $(GNL_BONUS_OBJS) $(LDFLAGS); \
 		./tester_bonus; \
 	done
 
 # Targets for convenience
 tester: $(OBJS)
-	@$(CC) $(CFLAGS) -o tester $(OBJS)
+	@$(CC) $(CFLAGS) -o tester $(OBJS) $(LDFLAGS)
 
 tester_bonus: $(OBJS_BONUS)
-	@$(CC) $(CFLAGS) -o tester_bonus $(OBJS_BONUS)
+	@$(CC) $(CFLAGS) -o tester_bonus $(OBJS_BONUS) $(LDFLAGS)
 
 m:
 	@./tester detailed

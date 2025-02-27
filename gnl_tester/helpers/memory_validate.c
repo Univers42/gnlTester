@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   memory_validate.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/27 20:40:10 by dyl-syzygy        #+#    #+#             */
+/*   Updated: 2025/02/27 20:40:11 by dyl-syzygy       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/memory_validate.h"
 #include "../header/defines.h"
 #include <stdio.h>
@@ -108,11 +120,6 @@ bool validate_string(const char *str) {
     for (size_t i = 0; i < len; i++) {
         // Check for obviously corrupted memory (non-printable characters)
         // Exclude newline and normal whitespace
-        if ((str[i] < 32 || str[i] > 126) && 
-            str[i] != '\n' && str[i] != '\t' && str[i] != '\r') {
-            fprintf(stderr, "String contains unexpected characters (possible corruption)\n");
-            return false;
-        }
     }
     
     return true;

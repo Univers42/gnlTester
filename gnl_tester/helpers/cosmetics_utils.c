@@ -1,60 +1,55 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cosmetics_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/27 20:39:40 by dyl-syzygy        #+#    #+#             */
+/*   Updated: 2025/02/27 20:54:18 by dyl-syzygy       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/test_utils.h"
 #include "../header/cosmetics.h"
-#include <unistd.h>  // For usleep()
-
+#include <unistd.h>
 void display_success_message(void) {
     printf("\n");
     printf(GREEN "     ╔═════════════════════════════════════════════════════════════╗\n" RESET);
-    printf(GREEN "     ║               " BLINK "✅ ALL TESTS PASSED! ✅" RESET GREEN "                 ║\n" RESET);
+    printf(GREEN "     ║               " BLINK "✅ ALL TESTS PASSED! ✅" RESET GREEN "                       ║\n" RESET);
     printf(GREEN "     ╚═════════════════════════════════════════════════════════════╝\n\n" RESET);
-    
-    //// Trophy with better symmetry and colors
-    //printf("          " GOLD "           .-✦✦✦✦-." RESET "\n");
-    //printf("          " GOLD "          /    ||    \\" RESET "\n");
-    //printf("          " GOLD "         (     ||     )" RESET "\n");
-    //printf("          " GOLD "          \\    ||    /" RESET "\n");
-    //printf("          " GOLD "           '-✦✦✦✦-'" RESET "\n");
-    //printf("          " GOLD "           .---||---." RESET "\n");
-    //printf("          " GOLD "          /    ||    \\" RESET "\n");
-    //printf("          " GOLD "         (  " BRONZE "'" GOLD "  ||  " BRONZE "'" GOLD "  )" RESET "\n");
-    //printf("          " GOLD "         /" BRONZE "-" GOLD "\"\"\"\"\"\"\"\"\"" BRONZE "-" GOLD "\\" RESET "\n");
-    //printf("          " GOLD "        / " BRONZE "/" GOLD "  " BRONZE "\\" GOLD "  " BRONZE "/" GOLD "  " BRONZE "\\" BRONZE " \\" RESET "\n");
-    //printf("          " BRONZE "       | |   GNL   | |" RESET "\n");
-    //printf("          " BRONZE "       | |  PASSED | |" RESET "\n");
-    //printf("          " BRONZE "        \\ \\       / /" RESET "\n");
-    //printf("          " BRONZE "         \\_\\     /_/" RESET "\n");
-    //printf("          " BRONZE "           '-----'" RESET "\n\n");
-
-    // Modern certificate style box
-    printf("\n");
-    printf(WHITE "       ╱╲                                                 ╱╲\n" RESET);
-    printf(WHITE "     ╱    ╲_______________________________________________╱    ╲\n" RESET);
-    printf(WHITE "    ╱      ╲" SILVER "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" WHITE "╱      ╲\n" RESET);
-    printf(WHITE "   ╱        ╲" SILVER "                                           " WHITE "╱        ╲\n" RESET);
-    printf(WHITE "  ╱          ╲" SILVER "          " GOLD "★  " YELLOW "CERTIFICATE OF EXCELLENCE" GOLD "  ★" SILVER "          " WHITE "╱          ╲\n" RESET);
-    printf(WHITE " ╱            ╲" SILVER "                                         " WHITE "╱            ╲\n" RESET);
-    printf(WHITE "╱              ╲" SILVER "  " GREEN "✓" SILVER " Your get_next_line passed with " BOLD GREEN "excellence" RESET SILVER "!  " WHITE "╱              ╲\n" RESET);
-    printf(WHITE "\\              ╱" SILVER "  " GREEN "✓" SILVER " Edge cases handled with " BOLD GREEN "surgical precision" RESET SILVER "! " WHITE "\\              ╱\n" RESET);
-    printf(WHITE " \\            ╱" SILVER "  " GREEN "✓" SILVER " Memory management: " BOLD GREEN "flawless & optimized" RESET SILVER "!  " WHITE "\\            ╱\n" RESET);
-    printf(WHITE "  \\          ╱" SILVER "                                         " WHITE "\\          ╱\n" RESET);
-    printf(WHITE "   \\        ╱" SILVER "           " GOLD "❖" YELLOW "  " BOLD YELLOW "CONGRATULATIONS!" RESET YELLOW "  " GOLD "❖" SILVER "            " WHITE "\\        ╱\n" RESET);
-    printf(WHITE "    \\      ╱" SILVER "                                           " WHITE "\\      ╱\n" RESET);
-    printf(WHITE "     \\____╱" SILVER "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" WHITE "\\____╱\n" RESET);
-    printf(WHITE "       \\╱" SILVER DARK "▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" WHITE "\\╱\n\n" RESET);
-
-    // Performance metrics with colored stars
-    printf(CYAN "     ✨ " BOLD "Achievement Unlocked:" RESET "\n");
-    printf(CYAN "     ├── " RESET "Code Quality:   " GREEN "Exceptional" RESET "   " GOLD "★★★★★" RESET "\n");
-    printf(CYAN "     ├── " RESET "Memory Usage:   " GREEN "Optimal" RESET "       " GOLD "★★★★★" RESET "\n");
-    printf(CYAN "     └── " RESET "Implementation: " GREEN "Masterful" RESET "     " GOLD "★★★★★" RESET "\n\n");
-
-    printf(YELLOW "     🏆 " BOLD "OUTSTANDING WORK!" RESET YELLOW " You've created a robust get_next_line!\n\n" RESET);
+    //
+    //printf(YELLOW "            .-=========-.             \n" RESET);
+    //printf(GOLD "           \\\\-'         '-//          \n" RESET);
+    //printf(GOLD "            |" SILVER " ####     #### " GOLD "|           \n" RESET);
+    //printf(GOLD "            |" SILVER " ####     #### " GOLD "|           \n" RESET);
+    //printf(GOLD "            |" SILVER " ####     #### " GOLD "|           \n" RESET);
+    //printf(GOLD "            \\" SILVER " ####     #### " GOLD "/           \n" RESET);
+    //printf(GOLD "             \\" SILVER " ###     ### " GOLD "/            \n" RESET);
+    //printf(GOLD "              \\'" SILVER " #     # " GOLD "'/             \n" RESET);
+    //printf(GOLD "               \\" SILVER "  #####  " GOLD "/              \n" RESET);
+    //printf(GOLD "               |" SILVER " ####### " GOLD "|              \n" RESET);
+    //printf(GOLD "               |" YELLOW " ####### " GOLD "|              \n" RESET);
+    //printf(GOLD "               |" YELLOW " ####### " GOLD "|              \n" RESET);
+    //printf(GOLD "               |" YELLOW " ####### " GOLD "|              \n" RESET);
+    //printf(GOLD "              /|" YELLOW " ####### " GOLD "|\\             \n" RESET);
+    //printf(GOLD "             / |" YELLOW " ####### " GOLD "| \\            \n" RESET);
+    //printf(GOLD "            /  |" YELLOW " ####### " GOLD "|  \\           \n" RESET);
+    //printf(GOLD "           |=====" YELLOW " ####### " GOLD "=====|          \n" RESET);
+    //printf(GOLD "            \\____|" YELLOW " ### " GOLD "|____/           \n" RESET);
+    //printf(GOLD "                 |===|              \n" RESET);
+    //printf(GOLD "                 |" YELLOW " # " GOLD "|              \n\n" RESET);
+    //
+    printf(CYAN "     🎉 " BOLD "CONGRATULATIONS!" RESET CYAN " Your get_next_line is perfect!\n" RESET);
+    printf(GREEN "     ✓ All edge cases handled\n" RESET);
+    printf(GREEN "     ✓ Memory management is flawless\n" RESET);
+    printf(GREEN "     ✓ Ready for submission!\n\n" RESET);
 }
 
 void display_failure_message(void) {
     printf("\n");
     printf(RED "     ╔═════════════════════════════════════════════════════════════╗\n" RESET);
-    printf(RED "     ║               " BLINK "❌ SOME TESTS FAILED! ❌" RESET RED "                 ║\n" RESET);
+    printf(RED "     ║               " BLINK "❌ SOME TESTS FAILED! ❌" RESET RED "                   ║\n" RESET);
     printf(RED "     ╚═════════════════════════════════════════════════════════════╝\n\n" RESET);
     
     printf(RED "             ▄▄▄▄▄▄▄▄▄▄▄\n" RESET);
@@ -83,15 +78,15 @@ void display_failure_message(void) {
     printf(CYAN "     💪 " BOLD "DON'T GIVE UP!" RESET CYAN " Debugging is part of the learning process!\n\n" RESET);
 }
 
- void display_start_message(void) {
+void display_start_message(void) {
     printf(CLEAR_SCREEN);
     printf("\n");
     printf(CYBER1 "     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n" RESET);
-    printf(CYBER2 "     ┃  " BOLD "GET_NEXT_LINE" RESET CYBER2 " - ULTIMATE TEST SUITE                     ┃\n" RESET);
-    printf(CYBER3 "     ┃  " RESET YELLOW "Version 2.0" RESET CYBER3 "                                           ┃\n" RESET);
+    printf(CYBER2 "     ┃  " BOLD "GET_NEXT_LINE" RESET CYBER2 " - ULTIMATE TEST SUITE                  ┃\n" RESET);
+    printf(CYBER3 "     ┃  " RESET YELLOW "Version 2.0" RESET CYBER3 "                                          ┃\n" RESET);
     printf(CYBER4 "     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n\n" RESET);
     
-    printf(MAGENTA "     ╭────────────────────────────────────────────────────╮\n" RESET);
+    printf(MAGENTA "     ╭───────────────────────────────────────────────────────────────────╮\n" RESET);
     printf(MAGENTA "     │" RESET);
     printf(BLUE "  ██████╗ ███╗   ██╗██╗         ████████╗███████╗███████╗████████╗ " RESET);
     printf(MAGENTA "│\n" RESET);
@@ -116,14 +111,14 @@ void display_failure_message(void) {
     printf(CYBER1 "  ╚═════╝ ╚═╝  ╚═══╝╚══════╝       ╚═╝   ╚══════╝╚══════╝   ╚═╝    " RESET);
     printf(MAGENTA "│\n" RESET);
     
-    printf(MAGENTA "     ╰────────────────────────────────────────────────────╯\n\n" RESET);
+    printf(MAGENTA "     ╰─────────────────────────────────────────────────────────────╯\n\n" RESET);
     
     printf(CYBER2 "     📋 Testing your get_next_line implementation...\n" RESET);
     printf(CYBER3 "     🛠️  Checking various edge cases and file formats...\n" RESET);
     printf(CYBER4 "     ⚡ Running high-performance validations...\n\n" RESET);
     
     fflush(stdout);
-    usleep(800000); // 0.8 seconds pause for dramatic effect - CHANGED FROM sleep() TO usleep()
+    usleep(800000);
 }
 
 void display_test_header(size_t buffer_size) {

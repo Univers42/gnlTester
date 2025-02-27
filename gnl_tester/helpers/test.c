@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/27 20:40:27 by dyl-syzygy        #+#    #+#             */
+/*   Updated: 2025/02/27 20:40:28 by dyl-syzygy       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "test_utils.h"
-#include "get_next_line.h" // Ensure this header is available and includes the declaration of get_next_line
+#include "get_next_line.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
@@ -22,7 +34,7 @@ void run_test(int fd, const char *expected) {
 
 int main(void) {
     is_initializing = false;
-    signal(SIGSEGV, SIG_DFL); // Replace with appropriate signal handler if needed
+    signal(SIGSEGV, SIG_DFL);
 
     int fd;
 

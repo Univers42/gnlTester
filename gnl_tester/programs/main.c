@@ -3,8 +3,9 @@
 #include "../header/defines.h"
 #include "../header/cosmetics.h"
 #include "../header/test_files.h"
-#include "../header/memory_validate.h" // Add this include
+#include "../header/memory_validate.h"
 #include "../../get_next_line.h"
+#include "../header/benchmarking.h"
 
 void *buffering_animation(void *arg) {
     (void)arg; // Suppress unused parameter warning
@@ -314,6 +315,9 @@ int main(int argc, char **argv) {
     snprintf(current_test_name, sizeof(current_test_name), "Initializing tests...");
     pthread_mutex_unlock(&progress_mutex);
     
+    // Start benchmarking
+    start_benchmark();
+    
     // Initialize animation thread if using short display mode
     pthread_t animation_thread;
     if (!detailed) {
@@ -321,13 +325,42 @@ int main(int argc, char **argv) {
         printf("\n"); // Add space for animation
     }
     
+    // Track times for different buffer sizes
+    size_t buffer_times[100] = {0}; // Assuming max 100 buffer sizes
+    size_t time_count = 0;
+    
     // Run memory allocation tests first
     test_memory_allocation(&all_tests_passed, detailed);
     
     // Run tests with different buffer sizes
     for (size_t i = 0; i < num_buffer_sizes; i++) {
-        run_tests_with_buffer_size(buffer_sizes[i], &all_tests_passed, detailed);
+        double total_time = 0.0;
+        int runs = 1; // Use 1 for normal testing, increase for more accurate benchmarking
+        
+        for (int j = 0; j < runs; j++) {
+            struct timeval buffer_start, buffer_end;
+            gettimeofday(&buffer_start, NULL);
+            
+            run_tests_with_buffer_size(buffer_sizes[i], &all_tests_passed, detailed);
+            
+            gettimeofday(&buffer_end, NULL);
+            double buffer_time = (buffer_end.tv_sec - buffer_start.tv_sec) + 
+                                (buffer_end.tv_usec - buffer_start.tv_usec) / 1000000.0;
+            total_time += buffer_time;
+        }
+        
+        double average_time = total_time / runs;
+        
+        if (time_count < 100) {
+            buffer_times[time_count++] = (size_t)(average_time * 1000); // Convert to ms
+        }
     }
+    
+    // Calculate buffer efficiency
+    double buffer_efficiency = calculate_buffer_efficiency(buffer_times, time_count);
+    
+    // Stop benchmarking
+    stop_benchmark(all_tests_passed, buffer_efficiency);
     
     // Force progress to 100% after all tests
     pthread_mutex_lock(&progress_mutex);
@@ -345,6 +378,8 @@ int main(int argc, char **argv) {
     // Display final results
     if (all_tests_passed) {
         display_success_message();
+        // Display benchmark results in success message
+        display_benchmark_results();
     } else {
         display_failure_message();
     }

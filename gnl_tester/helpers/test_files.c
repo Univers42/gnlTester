@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test_files.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/27 20:40:15 by dyl-syzygy        #+#    #+#             */
+/*   Updated: 2025/02/27 20:40:16 by dyl-syzygy       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/test_files.h"
 
-// Global definition of test files array
 const char *TEST_FILES[][2] = {
     {"test_cases/empty.txt", "expected_output/empty.txt"},
     {"test_cases/one_line.txt", "expected_output/one_line.txt"},
@@ -42,6 +53,6 @@ const char *TEST_FILES[][2] = {
     {"test_cases/10-b.txt", "expected_output/10-b.txt"},
     {"test_cases/11-bg.txt", "expected_output/11-bg.txt"},
     {"test_cases/12-bigben.txt", "expected_output/12-bigben.txt"},
-    {"test_cases/empty.txt", "expected_output/empty.txt"}, // Extra test to make it 42
-    {"test_cases/one_line.txt", "expected_output/one_line.txt"} // Extra test to make it 42
+    {"test_cases/empty.txt", "expected_output/empty.txt"},
+    {"test_cases/one_line.txt", "expected_output/one_line.txt"}
 };

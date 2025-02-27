@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gnl_wrapper.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/27 20:39:50 by dyl-syzygy        #+#    #+#             */
+/*   Updated: 2025/02/27 20:39:51 by dyl-syzygy       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/gnl_wrapper.h"
 #include "../header/logging.h"
 #include "../../get_next_line.h"
 #include <stdio.h>
-#include <string.h>  // Added for strlen, strncpy, strcat
+#include <string.h>
 
 char *gnl_wrapper(int fd)
 {
@@ -15,12 +27,10 @@ char *gnl_wrapper(int fd)
     
     char *line = get_next_line(fd);
     
-    // Handle NULL return or large lines without filling the terminal
     if (line == NULL) {
         LOG_DEBUG("get_next_line returned NULL");
     } else if (strlen(line) > 50) {
-        // Truncate very long lines in the log
-        char truncated[54]; // 50 chars + "..." + null terminator
+        char truncated[54];
         strncpy(truncated, line, 50);
         truncated[50] = '\0';
         strcat(truncated, "...");
