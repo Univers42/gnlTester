@@ -296,8 +296,6 @@ void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool
         test_file(test_files[i][0], test_files[i][1], all_tests_passed, detailed);
     }
 }
-
-// Update main function to use command-line arguments instead of scanf
 int main(int argc, char **argv)
 {
     printf("DEBUG: Starting bonus tester...\n");
@@ -321,14 +319,16 @@ int main(int argc, char **argv)
     }
     
     printf("DEBUG: Creating test directories...\n");
-    system("mkdir -p test_cases expected_output outputs");
+    if (system("mkdir -p test_cases expected_output outputs") == -1) {
+        perror("system");
+        return 1;
+    }
     
     printf("DEBUG: About to display start message...\n");
     display_start_message();
     printf("DEBUG: Start message displayed!\n");
 
-    size_t buffer_sizes[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
-    size_t num_buffer_sizes = sizeof(buffer_sizes) / sizeof(buffer_sizes[0]);
+    //size_t buffer_sizes[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
     bool all_tests_passed = true;
 
     printf("DEBUG: Creating simple test file...\n");

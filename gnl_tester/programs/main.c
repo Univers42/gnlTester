@@ -3,19 +3,8 @@
 #include "../header/defines.h"
 #include "../header/cosmetics.h"
 #include "../header/test_files.h"
-#include "../header/gnl_wrapper.h"
-#include "../header/logging.h"
-#include <unistd.h>
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <sys/wait.h>
+#include "../../get_next_line.h"
 
-/*
- * Animation thread function for displaying progress
- */
 void *buffering_animation(void *arg) {
     (void)arg; // Suppress unused parameter warning
     
@@ -92,9 +81,10 @@ void *buffering_animation(void *arg) {
     return NULL;
 }
 
-/*
- * Test a single file against expected output
- */
+// ╔══════════════════════════════════════════════╗
+// ║               TESTING FUNCTIONS              ║
+// ╚══════════════════════════════════════════════╝
+
 void test_file(const char *filename, const char *expected_output_file, bool *all_tests_passed, bool detailed) {
     // Update current file being tested (thread-safe)
     const char *basename;
@@ -106,6 +96,7 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     }
     
     pthread_mutex_lock(&progress_mutex);
+    // Use safer snprintf instead of strncpy
     snprintf(current_test_name, sizeof(current_test_name), "%s", basename);
     pthread_mutex_unlock(&progress_mutex);
     
@@ -116,7 +107,6 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
-        LOG_ERROR("Failed to open file: %s", filename);
         *all_tests_passed = false;
         display_test_result(filename, false, detailed);
         
@@ -140,8 +130,7 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
         return;
     }
     
-    LOG_INFO("Reading from fd: %d (file: %s)", fd, filename);
-    while ((line = gnl_wrapper(fd)) != NULL) {
+    while ((line = get_next_line(fd)) != NULL) {
         fprintf(output, "%s", line);
         free(line);
     }
@@ -151,10 +140,7 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     
     file_passed = compare_files("outputs/temp_output.txt", expected_output_file);
     if (!file_passed) {
-        LOG_WARNING("File comparison failed: %s", filename);
         *all_tests_passed = false;
-    } else {
-        LOG_INFO("File comparison succeeded: %s", filename);
     }
     
     // Update progress counter (thread-safe)
@@ -165,9 +151,6 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     display_test_result(filename, file_passed, detailed);
 }
 
-/*
- * Run tests with specific buffer size
- */
 void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool detailed) {
     // Use the global test files array
     size_t num_tests = TEST_FILES_COUNT;
@@ -190,16 +173,13 @@ void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool
     }
 }
 
-/*
- * Main function
- */
+// ╔══════════════════════════════════════════════╗
+// ║                  MAIN FUNCTION               ║
+// ╚══════════════════════════════════════════════╝
+
 int main(int argc, char **argv) {
-    // Initialize logging
-    init_logging("gnl_test.log");
-    LOG_INFO("Starting GNL tester...");
-    
     bool detailed = true;
-    size_t buffer_sizes[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024};  // Reduced list for faster testing
+    size_t buffer_sizes[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
     size_t num_buffer_sizes = sizeof(buffer_sizes) / sizeof(buffer_sizes[0]);
     bool all_tests_passed = true;
     
@@ -218,21 +198,18 @@ int main(int argc, char **argv) {
         return 1;
     }
     
-    // Create necessary directories and test files
-    printf("DEBUG: Creating directories...\n");
-    int result = system("chmod +x create_test_files.sh && ./create_test_files.sh");
-    if (result != 0) {
-        printf("WARNING: Failed to create test files. Some tests may fail.\n");
+    // Create outputs directory if it doesn't exist
+    int mkdir_result = system("mkdir -p outputs");
+    if (mkdir_result != 0) {
+        fprintf(stderr, RED "Warning: Failed to create outputs directory\n" RESET);
+        // Continue anyway, as the directory might already exist
     }
     
     // Display welcome banner
-    printf("DEBUG: Displaying welcome banner\n");
     display_start_message();
-    printf("DEBUG: Banner displayed, continuing execution\n");
     
     // Get accurate count for progress tracking
     size_t num_tests = TEST_FILES_COUNT;
-    printf("DEBUG: Found %zu test files\n", num_tests);
     
     // Initialize progress tracking
     pthread_mutex_lock(&progress_mutex);
@@ -248,11 +225,8 @@ int main(int argc, char **argv) {
         printf("\n"); // Add space for animation
     }
     
-    printf("DEBUG: Running tests with %zu buffer sizes\n", num_buffer_sizes);
-    
     // Run tests with different buffer sizes
-    for (size_t i = 0; i < num_buffer_sizes; i++) {  // Run all sizes now
-        printf("DEBUG: Testing with buffer size %zu\n", buffer_sizes[i]);
+    for (size_t i = 0; i < num_buffer_sizes; i++) {
         run_tests_with_buffer_size(buffer_sizes[i], &all_tests_passed, detailed);
     }
     
@@ -263,16 +237,11 @@ int main(int argc, char **argv) {
     }
     
     // Display final results
-    printf("DEBUG: Tests completed, displaying results\n");
     if (all_tests_passed) {
         display_success_message();
     } else {
         display_failure_message();
     }
-    
-    // Clean up logs
-    LOG_INFO("Tester completed with status: %s", all_tests_passed ? "SUCCESS" : "FAILURE");
-    close_logging();
     
     // Clean up mutex
     pthread_mutex_destroy(&progress_mutex);
