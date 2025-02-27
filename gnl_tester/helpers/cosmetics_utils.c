@@ -6,7 +6,7 @@
 /*   By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 20:39:40 by dyl-syzygy        #+#    #+#             */
-/*   Updated: 2025/02/27 20:54:18 by dyl-syzygy       ###   ########.fr       */
+/*   Updated: 2025/02/27 21:13:53 by dyl-syzygy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void display_start_message(void) {
     printf(CYBER1 "     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n" RESET);
     printf(CYBER2 "     ┃  " BOLD "GET_NEXT_LINE" RESET CYBER2 " - ULTIMATE TEST SUITE                  ┃\n" RESET);
     printf(CYBER3 "     ┃  " RESET YELLOW "Version 2.0" RESET CYBER3 "                                          ┃\n" RESET);
+    printf(CYBER3 "     ┃  " RESET CYAN "By dlesieur -->" RESET YELLOW " https://github.com/LESdylan" RESET CYBER3 "                  ┃\n" RESET);
     printf(CYBER4 "     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n\n" RESET);
     
     printf(MAGENTA "     ╭───────────────────────────────────────────────────────────────────╮\n" RESET);

@@ -6,7 +6,7 @@
 /*   By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 20:39:36 by dyl-syzygy        #+#    #+#             */
-/*   Updated: 2025/02/27 20:39:37 by dyl-syzygy       ###   ########.fr       */
+/*   Updated: 2025/02/27 21:06:51 by dyl-syzygy       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void start_benchmark(void) {
     
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
-    benchmark_results.memory_peak = r_usage.ru_maxrss;
+    // Fix sign conversion with explicit cast
+    benchmark_results.memory_peak = (size_t)r_usage.ru_maxrss;
     
     gettimeofday(&start_time, NULL);
 }
@@ -87,16 +88,18 @@ double calculate_buffer_efficiency(size_t *buffer_times, size_t count) {
     
     double sum = 0.0;
     for (size_t i = 0; i < count; i++) {
-        sum += buffer_times[i];
+        // Fix conversion with explicit cast
+        sum += (double)buffer_times[i];
     }
-    double avg = sum / count;
+    double avg = sum / (double)count;
     
     double variance_sum = 0.0;
     for (size_t i = 0; i < count; i++) {
-        double diff = buffer_times[i] - avg;
+        // Fix conversion with explicit cast
+        double diff = (double)buffer_times[i] - avg;
         variance_sum += diff * diff;
     }
-    double variance = variance_sum / count;
+    double variance = variance_sum / (double)count;
     double std_dev = sqrt(variance);
     
     double consistency = 100.0 - (std_dev / avg * 100.0);
@@ -108,12 +111,15 @@ double calculate_buffer_efficiency(size_t *buffer_times, size_t count) {
 
 void stop_benchmark(bool all_tests_passed, double buffer_efficiency) {
     gettimeofday(&end_time, NULL);
-    double time_elapsed = (end_time.tv_sec - start_time.tv_sec) + 
-                         (end_time.tv_usec - start_time.tv_usec) / 1000000.0;
+    // Fix conversion with explicit casts
+    double sec_diff = (double)(end_time.tv_sec - start_time.tv_sec);
+    double usec_diff = (double)(end_time.tv_usec - start_time.tv_usec) / 1000000.0;
+    double time_elapsed = sec_diff + usec_diff;
     
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
-    size_t current_memory = r_usage.ru_maxrss;
+    // Fix sign conversion with explicit cast
+    size_t current_memory = (size_t)r_usage.ru_maxrss;
     
     if (current_memory > memory_peak) {
         memory_peak = current_memory;
@@ -122,8 +128,9 @@ void stop_benchmark(bool all_tests_passed, double buffer_efficiency) {
     size_t potential_leaks = (memory_allocated > memory_freed) ? 
                              memory_allocated - memory_freed : 0;
     
+    // Fix conversion with explicit casts
     double memory_efficiency = (memory_peak > 0) ? 
-                               100.0 - (potential_leaks * 100.0 / memory_peak) : 100.0;
+                               100.0 - ((double)potential_leaks * 100.0 / (double)memory_peak) : 100.0;
     if (memory_efficiency < 0) memory_efficiency = 0.0;
     
     double time_efficiency = 100.0 - (time_elapsed * 5.0);

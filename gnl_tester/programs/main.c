@@ -1,3 +1,10 @@
+// Define feature test macros BEFORE any includes
+#define _DEFAULT_SOURCE 1
+#define _BSD_SOURCE 1
+#define _POSIX_C_SOURCE 200809L
+#define _XOPEN_SOURCE 700
+
+#include <unistd.h>  // Need to include this early
 #include "../header/test_utils.h"
 #include "../header/globals.h"
 #include "../header/defines.h"
@@ -6,6 +13,7 @@
 #include "../header/memory_validate.h"
 #include "../../get_next_line.h"
 #include "../header/benchmarking.h"
+#include <sys/time.h>
 
 void *buffering_animation(void *arg) {
     (void)arg; // Suppress unused parameter warning
@@ -344,8 +352,11 @@ int main(int argc, char **argv) {
             run_tests_with_buffer_size(buffer_sizes[i], &all_tests_passed, detailed);
             
             gettimeofday(&buffer_end, NULL);
-            double buffer_time = (buffer_end.tv_sec - buffer_start.tv_sec) + 
-                                (buffer_end.tv_usec - buffer_start.tv_usec) / 1000000.0;
+            // Fix the type conversion issues
+            double sec_diff = (double)(buffer_end.tv_sec - buffer_start.tv_sec);
+            double usec_diff = (double)(buffer_end.tv_usec - buffer_start.tv_usec) / 1000000.0;
+            double buffer_time = sec_diff + usec_diff;
+            
             total_time += buffer_time;
         }
         

@@ -6,7 +6,7 @@
 #    By: dyl-syzygy <dyl-syzygy@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/27 20:41:02 by dyl-syzygy        #+#    #+#              #
-#    Updated: 2025/02/27 20:41:03 by dyl-syzygy       ###   ########.fr        #
+#    Updated: 2025/02/27 21:06:05 by dyl-syzygy       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,12 +37,8 @@ STRICT_CFLAGS = -Wall -Wextra -Werror -pedantic \
                 -Wformat=2 -Wformat-truncation=2 -Wundef \
                 -Wcast-align -Wwrite-strings -Wcast-qual \
                 -Wunreachable-code -Wpointer-arith \
-                -Wstrict-prototypes -Wold-style-definition \
-                -Wredundant-decls -Wnested-externs \
                 -Wmissing-include-dirs -Wswitch-default \
-                -std=c99 \
                 -Iheader
-
 # Define separate flags for external files
 GNL_CFLAGS = $(NORMAL_CFLAGS)
 
