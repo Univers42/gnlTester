@@ -28,6 +28,19 @@
 # define CLEAR_LINE  "\033[K"
 # define NEWLINE    "\n"
 
+
+// Trophy colors
+# define GOLD        "\033[38;5;220m"  // Rich gold color
+# define BRONZE      "\033[38;5;130m"  // Bronze/copper tone
+# define SILVER      "\033[38;5;7m"   // Silver/gray tone
+# define DARK_RED     "\033[0;31m"    // Dark red
+# define DARK_GREEN   "\033[0;32m"    // Dark green
+# define DARK_YELLOW  "\033[0;33m"    // Dark yellow/brown
+# define DARK_BLUE    "\033[0;34m"    // Dark blue
+# define DARK_MAGENTA "\033[0;35m"    // Dark magenta
+# define DARK_CYAN    "\033[0;36m"    // Dark cyan
+# define DARK_GRAY    "\033[0;90m"    // Dark gray
+# define DARK   "\033[0;30m"    // Black/Dark black
 // Memory validation defines - make default behavior safer
 # define MEMORY_PADDING_SIZE 8  // Memory padding size for validation
 # define MEMORY_VALIDATE_HEAP 0 // Disable unsafe memory validation by default

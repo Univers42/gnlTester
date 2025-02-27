@@ -2,45 +2,78 @@
 #include "../header/cosmetics.h"
 #include <unistd.h>  // For usleep()
 
- void display_success_message(void) {
+void display_success_message(void) {
     printf("\n");
-    printf(GREEN "     ╔═══════════════════════════════════════════════╗\n" RESET);
-    printf(GREEN "     ║           " BLINK "✅ ALL TESTS PASSED! ✅" RESET GREEN "           ║\n" RESET);
-    printf(GREEN "     ╚═══════════════════════════════════════════════╝\n\n" RESET);
+    printf(GREEN "     ╔═════════════════════════════════════════════════════════════╗\n" RESET);
+    printf(GREEN "     ║               " BLINK "✅ ALL TESTS PASSED! ✅" RESET GREEN "                 ║\n" RESET);
+    printf(GREEN "     ╚═════════════════════════════════════════════════════════════╝\n\n" RESET);
     
-    printf(YELLOW "           .-=========-.\n" RESET);
-    printf(YELLOW "           \\'-=======-'/\n" RESET);
-    printf(YELLOW "           _|   .=.   |_\n" RESET);
-    printf(YELLOW "          ((|  {{1}}  |))\n" RESET);
-    printf(YELLOW "           \\|   /|\\   |/\n" RESET);
-    printf(YELLOW "            \\__ '`' __/\n" RESET);
-    printf(YELLOW "              _`) (`_\n" RESET);
-    printf(GREEN "            _/_______\\_\n" RESET);
-    printf(GREEN "           /___________\\\n\n" RESET);
-    
-    printf(CYAN "     🎯 " BOLD "Performance Metrics:" RESET "\n");
-    printf(CYAN "     ├──" RESET " Memory Usage: " GREEN "Optimal" RESET "\n");
-    printf(CYAN "     ├──" RESET " Speed: " GREEN "Excellent" RESET "\n");
-    printf(CYAN "     └──" RESET " Code Quality: " GREEN "Outstanding" RESET "\n\n");
-    
-    printf(YELLOW "     🏆 " BOLD "CONGRATULATIONS!" RESET YELLOW " Your GNL implementation is solid! 🏆\n\n" RESET);
+    //// Trophy with better symmetry and colors
+    //printf("          " GOLD "           .-✦✦✦✦-." RESET "\n");
+    //printf("          " GOLD "          /    ||    \\" RESET "\n");
+    //printf("          " GOLD "         (     ||     )" RESET "\n");
+    //printf("          " GOLD "          \\    ||    /" RESET "\n");
+    //printf("          " GOLD "           '-✦✦✦✦-'" RESET "\n");
+    //printf("          " GOLD "           .---||---." RESET "\n");
+    //printf("          " GOLD "          /    ||    \\" RESET "\n");
+    //printf("          " GOLD "         (  " BRONZE "'" GOLD "  ||  " BRONZE "'" GOLD "  )" RESET "\n");
+    //printf("          " GOLD "         /" BRONZE "-" GOLD "\"\"\"\"\"\"\"\"\"" BRONZE "-" GOLD "\\" RESET "\n");
+    //printf("          " GOLD "        / " BRONZE "/" GOLD "  " BRONZE "\\" GOLD "  " BRONZE "/" GOLD "  " BRONZE "\\" BRONZE " \\" RESET "\n");
+    //printf("          " BRONZE "       | |   GNL   | |" RESET "\n");
+    //printf("          " BRONZE "       | |  PASSED | |" RESET "\n");
+    //printf("          " BRONZE "        \\ \\       / /" RESET "\n");
+    //printf("          " BRONZE "         \\_\\     /_/" RESET "\n");
+    //printf("          " BRONZE "           '-----'" RESET "\n\n");
+
+    // Modern certificate style box
+    printf("\n");
+    printf(WHITE "       ╱╲                                                 ╱╲\n" RESET);
+    printf(WHITE "     ╱    ╲_______________________________________________╱    ╲\n" RESET);
+    printf(WHITE "    ╱      ╲" SILVER "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" WHITE "╱      ╲\n" RESET);
+    printf(WHITE "   ╱        ╲" SILVER "                                           " WHITE "╱        ╲\n" RESET);
+    printf(WHITE "  ╱          ╲" SILVER "          " GOLD "★  " YELLOW "CERTIFICATE OF EXCELLENCE" GOLD "  ★" SILVER "          " WHITE "╱          ╲\n" RESET);
+    printf(WHITE " ╱            ╲" SILVER "                                         " WHITE "╱            ╲\n" RESET);
+    printf(WHITE "╱              ╲" SILVER "  " GREEN "✓" SILVER " Your get_next_line passed with " BOLD GREEN "excellence" RESET SILVER "!  " WHITE "╱              ╲\n" RESET);
+    printf(WHITE "\\              ╱" SILVER "  " GREEN "✓" SILVER " Edge cases handled with " BOLD GREEN "surgical precision" RESET SILVER "! " WHITE "\\              ╱\n" RESET);
+    printf(WHITE " \\            ╱" SILVER "  " GREEN "✓" SILVER " Memory management: " BOLD GREEN "flawless & optimized" RESET SILVER "!  " WHITE "\\            ╱\n" RESET);
+    printf(WHITE "  \\          ╱" SILVER "                                         " WHITE "\\          ╱\n" RESET);
+    printf(WHITE "   \\        ╱" SILVER "           " GOLD "❖" YELLOW "  " BOLD YELLOW "CONGRATULATIONS!" RESET YELLOW "  " GOLD "❖" SILVER "            " WHITE "\\        ╱\n" RESET);
+    printf(WHITE "    \\      ╱" SILVER "                                           " WHITE "\\      ╱\n" RESET);
+    printf(WHITE "     \\____╱" SILVER "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" WHITE "\\____╱\n" RESET);
+    printf(WHITE "       \\╱" SILVER DARK "▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" WHITE "\\╱\n\n" RESET);
+
+    // Performance metrics with colored stars
+    printf(CYAN "     ✨ " BOLD "Achievement Unlocked:" RESET "\n");
+    printf(CYAN "     ├── " RESET "Code Quality:   " GREEN "Exceptional" RESET "   " GOLD "★★★★★" RESET "\n");
+    printf(CYAN "     ├── " RESET "Memory Usage:   " GREEN "Optimal" RESET "       " GOLD "★★★★★" RESET "\n");
+    printf(CYAN "     └── " RESET "Implementation: " GREEN "Masterful" RESET "     " GOLD "★★★★★" RESET "\n\n");
+
+    printf(YELLOW "     🏆 " BOLD "OUTSTANDING WORK!" RESET YELLOW " You've created a robust get_next_line!\n\n" RESET);
 }
 
 void display_failure_message(void) {
     printf("\n");
-    printf(RED "     ╔═══════════════════════════════════════════════╗\n" RESET);
-    printf(RED "     ║           " BLINK "❌ SOME TESTS FAILED! ❌" RESET RED "           ║\n" RESET);
-    printf(RED "     ╚═══════════════════════════════════════════════╝\n\n" RESET);
+    printf(RED "     ╔═════════════════════════════════════════════════════════════╗\n" RESET);
+    printf(RED "     ║               " BLINK "❌ SOME TESTS FAILED! ❌" RESET RED "                 ║\n" RESET);
+    printf(RED "     ╚═════════════════════════════════════════════════════════════╝\n\n" RESET);
     
-    printf(RED "           .-=========-.\n" RESET);
-    printf(RED "           \\'-=======-'/\n" RESET);
-    printf(RED "           _|   .=.   |_\n" RESET);
-    printf(RED "          ((|  {{1}}  |))\n" RESET);
-    printf(RED "           \\|   /|\\   |/\n" RESET);
-    printf(RED "            \\__ '`' __/\n" RESET);
-    printf(RED "              _`) (`_\n" RESET);
-    printf(RED "            _/_______\\_\n" RESET);
-    printf(RED "           /___________\\\n\n" RESET);
+    printf(RED "             ▄▄▄▄▄▄▄▄▄▄▄\n" RESET);
+    printf(RED "           ▄█" RESET WHITE "▀" RED "███████" RESET WHITE "▀" RED "█▄\n" RESET);
+    printf(RED "          ██" RESET RED "▄" WHITE "▀▀▀▀▀▀▀▀▀" RED "▄" WHITE "██\n" RESET);
+    printf(RED "          ▀████" RESET WHITE "▀▀▀▀▀" RED "████▀\n" RESET);
+    printf(RED "            ▀████████████▀\n" RESET);
+    printf(RED "        ▄▄▄▄▄▄▀" RESET WHITE "▀" RED "██████" RESET WHITE "▀" RED "▀▄▄▄▄▄▄\n" RESET);
+    printf(RED "      ▄█" RESET WHITE "▀" RED "██" RESET WHITE "▀" RED "█" RESET WHITE "▀▀▀▀▀▀▀▀▀▀" RED "█" RESET WHITE "▀" RED "██" RESET WHITE "▀" RED "█▄\n" RESET);
+    printf(RED "     ██" RESET WHITE "▀" RED "██" RESET WHITE "▀" RED "█" RESET WHITE "             " RED "█" RESET WHITE "▀" RED "██" RESET WHITE "▀" RED "██\n" RESET);
+    printf(RED "     ██" RESET WHITE "●" RED "██" RESET WHITE "●" RED "█" RESET WHITE "     ☹︎       " RED "█" RESET WHITE "●" RED "██" RESET WHITE "●" RED "██\n" RESET);
+    printf(RED "     ██" RESET WHITE "▄" RED "██" RESET WHITE "▄" RED "█" RESET WHITE "             " RED "█" RESET WHITE "▄" RED "██" RESET WHITE "▄" RED "██\n" RESET);
+    printf(RED "      ▀█" RESET WHITE "▄" RED "██" RESET WHITE "▄" RED "█" RESET WHITE "▄▄▄▄▄▄▄▄▄▄▄" RED "█" RESET WHITE "▄" RED "██" RESET WHITE "▄" RED "█▀\n" RESET);
+    printf(RED "        ▀▀▀▀▀" RESET WHITE "▄" RED "██████" RESET WHITE "▄" RED "▀▀▀▀▀\n" RESET);
+    printf(RED "            ▀████████████▀\n" RESET);
+    printf(RED "          ▄████" RESET WHITE "▄▄▄▄▄" RED "████▄\n" RESET);
+    printf(RED "          ██" RESET RED "▀" WHITE "▄▄▄▄▄▄▄▄▄" RED "▀" WHITE "██\n" RESET);
+    printf(RED "           ▀█" RESET WHITE "▄" RED "███████" RESET WHITE "▄" RED "█▀\n" RESET);
+    printf(RED "             ▀▀▀▀▀▀▀▀▀▀▀\n\n" RESET);
     
     printf(YELLOW "     🔍 " BOLD "Debugging Tips:" RESET "\n");
     printf(YELLOW "     ├──" RESET " Check buffer handling in edge cases\n");

@@ -3,29 +3,29 @@
 
 #include <stdbool.h>
 
-// Log levels
+// Define log levels
 typedef enum {
-    LOG_DEBUG,
-    LOG_INFO,
-    LOG_WARNING,
-    LOG_ERROR,
-    LOG_CRITICAL
+    LOG_LEVEL_DEBUG,
+    LOG_LEVEL_INFO,
+    LOG_LEVEL_WARNING,
+    LOG_LEVEL_ERROR,
+    LOG_LEVEL_CRITICAL
 } LogLevel;
 
-// Initialize logging to a specific file
+// Initialize logging system
 bool init_logging(const char *filename);
 
-// Log a message with the specified level
+// Log a message
 void log_message(LogLevel level, const char *format, ...);
 
-// Close and clean up logging
-void close_logging(void);
-
 // Convenience macros for different log levels
-#define LOG_DEBUG(fmt, ...) log_message(LOG_DEBUG, fmt, ##__VA_ARGS__)
-#define LOG_INFO(fmt, ...) log_message(LOG_INFO, fmt, ##__VA_ARGS__)
-#define LOG_WARNING(fmt, ...) log_message(LOG_WARNING, fmt, ##__VA_ARGS__)
-#define LOG_ERROR(fmt, ...) log_message(LOG_ERROR, fmt, ##__VA_ARGS__)
-#define LOG_CRITICAL(fmt, ...) log_message(LOG_CRITICAL, fmt, ##__VA_ARGS__)
+#define LOG_DEBUG(format, ...) log_message(LOG_LEVEL_DEBUG, format, ##__VA_ARGS__)
+#define LOG_INFO(format, ...) log_message(LOG_LEVEL_INFO, format, ##__VA_ARGS__)
+#define LOG_WARNING(format, ...) log_message(LOG_LEVEL_WARNING, format, ##__VA_ARGS__)
+#define LOG_ERROR(format, ...) log_message(LOG_LEVEL_ERROR, format, ##__VA_ARGS__)
+#define LOG_CRITICAL(format, ...) log_message(LOG_LEVEL_CRITICAL, format, ##__VA_ARGS__)
+
+// Clean up logging
+void close_logging(void);
 
 #endif // LOGGING_H
