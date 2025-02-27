@@ -155,5 +155,11 @@ int main(void) {
     run_test(fd, NULL);
     close(fd);
 
+    printf("files/giant_line.txt:\n");
+    fd = open("files/giant_line.txt", O_RDWR);
+    run_test(fd, "This is a really long line that continues for quite some time without any breaks or newline characters whatsoever and is designed to test buffer handling capabilities when dealing with long continuous strings of text without natural breaks. It's important to ensure that your get_next_line implementation can correctly parse and return such lengthy content without any issues.");
+    run_test(fd, NULL);
+    close(fd);
+
     return 0;
 }

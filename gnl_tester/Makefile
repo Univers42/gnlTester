@@ -188,4 +188,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all run_tests clean fclean re m b run_all header init help
+create_test_files:
+	@./create_test_files.sh
+
+.PHONY: all run_tests clean fclean re m b run_all header init help create_test_files

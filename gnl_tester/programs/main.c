@@ -18,7 +18,7 @@ void *buffering_animation(void *arg) {
     
     int spinner_idx = 0;
     int counter = 0;
-    int max_progress = 40;
+    int max_progress = 80; // Increased for smoother progress bar
     
     // Initial empty line for animation space
     printf("\n");
@@ -72,10 +72,10 @@ void *buffering_animation(void *arg) {
         printf(CYAN "Testing: " RESET WHITE "%-40s" RESET, test_name);
         
         fflush(stdout);
-        usleep(60000); // 60ms for smoother animation
+        usleep(30000); // 30ms for smoother animation
     }
     
-    // Final message
+    // Ensure progress bar reaches 100%
     printf("\r" CYAN "     ✓ " GREEN "Testing complete!                                                      \n" RESET);
     
     return NULL;
@@ -130,17 +130,29 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
         return;
     }
     
+    // Add timeout mechanism
+    time_t start_time = time(NULL);
     while ((line = get_next_line(fd)) != NULL) {
         fprintf(output, "%s", line);
         free(line);
+        
+        // Check for timeout (e.g., 10 seconds)
+        if (difftime(time(NULL), start_time) > 10) {
+            printf(RED "Error: Test timed out for file %s\n" RESET, filename);
+            *all_tests_passed = false;
+            file_passed = false;
+            break;
+        }
     }
     
     fclose(output);
     close(fd);
     
-    file_passed = compare_files("outputs/temp_output.txt", expected_output_file);
-    if (!file_passed) {
-        *all_tests_passed = false;
+    if (file_passed) {
+        file_passed = compare_files("outputs/temp_output.txt", expected_output_file);
+        if (!file_passed) {
+            *all_tests_passed = false;
+        }
     }
     
     // Update progress counter (thread-safe)
@@ -230,8 +242,15 @@ int main(int argc, char **argv) {
         run_tests_with_buffer_size(buffer_sizes[i], &all_tests_passed, detailed);
     }
     
-    // Stop animation and wait for thread to finish
+    // Force progress to 100% after all tests
+    pthread_mutex_lock(&progress_mutex);
+    completed_tests = total_test_count;
+    strcpy(current_test_name, "Complete!");
+    pthread_mutex_unlock(&progress_mutex);
+    
+    // Give the animation thread one more iteration to render 100%
     if (!detailed) {
+        usleep(100000);  // 100ms to ensure animation updates
         stop_animation = true;
         pthread_join(animation_thread, NULL);
     }
