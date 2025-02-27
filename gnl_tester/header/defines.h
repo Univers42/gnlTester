@@ -27,4 +27,10 @@
 # define MOVE_UP     "\033[1A"
 # define CLEAR_LINE  "\033[K"
 # define NEWLINE    "\n"
+
+// Memory validation defines - make default behavior safer
+# define MEMORY_PADDING_SIZE 8  // Memory padding size for validation
+# define MEMORY_VALIDATE_HEAP 0 // Disable unsafe memory validation by default
+# define TRACK_BUFFER_OVERFLOWS 0 // Disable unsafe buffer tracking by default
+
 #endif

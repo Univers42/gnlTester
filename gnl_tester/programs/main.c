@@ -3,6 +3,7 @@
 #include "../header/defines.h"
 #include "../header/cosmetics.h"
 #include "../header/test_files.h"
+#include "../header/memory_validate.h" // Add this include
 #include "../../get_next_line.h"
 
 void *buffering_animation(void *arg) {
@@ -133,6 +134,17 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     // Add timeout mechanism
     time_t start_time = time(NULL);
     while ((line = get_next_line(fd)) != NULL) {
+        // Check for memory corruption
+        #if defined(TRACK_BUFFER_OVERFLOWS) && TRACK_BUFFER_OVERFLOWS == 1
+        if (!validate_string(line)) {
+            printf(RED "Error: Memory corruption detected in result from %s\n" RESET, filename);
+            *all_tests_passed = false;
+            file_passed = false;
+            free(line);
+            break;
+        }
+        #endif
+        
         fprintf(output, "%s", line);
         free(line);
         
@@ -161,6 +173,74 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     pthread_mutex_unlock(&progress_mutex);
     
     display_test_result(filename, file_passed, detailed);
+}
+
+// Add a specific test for the "+6" issue
+void test_memory_allocation(bool *all_tests_passed, bool detailed) {
+    #if defined(MEMORY_VALIDATE_HEAP) && MEMORY_VALIDATE_HEAP == 1
+    pthread_mutex_lock(&progress_mutex);
+    snprintf(current_test_name, sizeof(current_test_name), "Memory corruption test");
+    pthread_mutex_unlock(&progress_mutex);
+    
+    if (detailed) {
+        printf(CYAN "     ┌── " BOLD "Running memory validation tests" RESET "\n");
+    }
+    
+    // Set default result for this test (pass unless problem found)
+    bool memory_test_passed = true;
+    
+    // Create a simpler test for the "+6" issue - avoid accessing unsafe memory
+    const char *test_file = "test_cases/memory_test.txt";
+    FILE *f = fopen(test_file, "w");
+    if (!f) {
+        memory_test_passed = false;
+        if (detailed) {
+            printf(RED "     ├── ✗ Could not create test file" RESET "\n");
+        }
+    } else {
+        fprintf(f, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
+        fclose(f);
+        
+        int fd = open(test_file, O_RDONLY);
+        if (fd == -1) {
+            memory_test_passed = false;
+            if (detailed) {
+                printf(RED "     ├── ✗ Could not open test file" RESET "\n");
+            }
+        } else {
+            // Read a line and check if it's properly terminated
+            char *line = get_next_line(fd);
+            if (line) {
+                size_t len = strlen(line);
+                if (len > 0 && line[len-1] != '\n') {
+                    if (detailed) {
+                        printf(RED "     ├── ✗ Memory corruption test: line doesn't end with newline" RESET "\n");
+                    }
+                    memory_test_passed = false;
+                } else if (detailed) {
+                    printf(GREEN "     ├── ✓ Memory validation passed" RESET "\n");
+                }
+                free(line);
+            }
+            close(fd);
+        }
+    }
+    
+    // Update the overall test result
+    if (!memory_test_passed) {
+        *all_tests_passed = false;
+    }
+    pthread_mutex_lock(&progress_mutex);
+    completed_tests++;
+    pthread_mutex_unlock(&progress_mutex);
+    #else
+    (void)all_tests_passed; // Suppress unused parameter warning
+    (void)detailed; // Suppress unused parameter warning
+    // When memory validation is disabled, just report that
+    if (detailed) {
+        printf(YELLOW "     ├── Memory validation disabled" RESET "\n");
+    }
+    #endif
 }
 
 void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool detailed) {
@@ -225,7 +305,7 @@ int main(int argc, char **argv) {
     
     // Initialize progress tracking
     pthread_mutex_lock(&progress_mutex);
-    total_test_count = num_tests * num_buffer_sizes;
+    total_test_count = num_tests * num_buffer_sizes + 1; // +1 for memory test
     completed_tests = 0;
     snprintf(current_test_name, sizeof(current_test_name), "Initializing tests...");
     pthread_mutex_unlock(&progress_mutex);
@@ -236,6 +316,9 @@ int main(int argc, char **argv) {
         pthread_create(&animation_thread, NULL, buffering_animation, NULL);
         printf("\n"); // Add space for animation
     }
+    
+    // Run memory allocation tests first
+    test_memory_allocation(&all_tests_passed, detailed);
     
     // Run tests with different buffer sizes
     for (size_t i = 0; i < num_buffer_sizes; i++) {

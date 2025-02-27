@@ -69,7 +69,7 @@ GNL_SRCS = $(GNL_PATH)get_next_line.c $(GNL_PATH)get_next_line_utils.c
 GNL_BONUS_SRCS = $(GNL_PATH)get_next_line_bonus.c $(GNL_PATH)get_next_line_utils_bonus.c
 
 # Helper source files in helpers/ directory
-HELPER_SRCS = helpers/test_files.c helpers/globals.c helpers/cosmetics_utils.c helpers/test_utils.c helpers/gnl_wrapper.c helpers/logging.c
+HELPER_SRCS = helpers/test_files.c helpers/globals.c helpers/cosmetics_utils.c helpers/test_utils.c helpers/gnl_wrapper.c helpers/logging.c helpers/memory_validate.c
 
 ################################################################################
 #                                  OBJECT FILES                               #
