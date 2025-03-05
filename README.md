@@ -1,161 +1,94 @@
-# Get Next Line Ultimate Tester
+# GNL Tester
 
-A comprehensive tester for the 42 School "get_next_line" project with beautiful visuals, real-time progress tracking, and thorough test cases.
+This tester is designed to help you validate your implementation of the `get_next_line` function. It provides a variety of test cases to ensure your function handles different scenarios correctly.
 
-![GNL Tester Banner](https://i.imgur.com/placeholder.png)
+## Project Structure
 
-## Features
+- **bigfiles**: (Beta) Currently unused, reserved for future test sequences.
+- **examples**: (Beta) Contains sample outputs to illustrate expected behavior.
+- **expected_output**: Stores the reference output files for comparison.
+- **header**: Provides organization for the implementation due to its complexity.
+- **helpers**: Contains functions and logic that support the program's execution.
+- **outputs**: Stores logs; if errors occur, they will be recorded here.
+- **programs**: If issues arise with the tester, they may originate from this directory.
+- **test_cases**: Contains various edge cases to thoroughly test your function.
 
-- **Visual Feedback**: Beautiful console UI with color-coded results
-- **Comprehensive Testing**: Tests across multiple BUFFER_SIZE values
-- **Real-time Progress**: Live tracking of test progress with animation
-- **Detailed Results**: Clear pass/fail indicators for each test case
-- **Bonus Support**: Tests for both mandatory and bonus parts
+## Usage
 
-## Directory Structure
+To use this tester, follow these steps:
 
-```
-gnlTester/
-├── header/               # Header files
-│   ├── defines.h         # ANSI color codes and other definitions
-│   ├── globals.h         # Global variable declarations
-│   ├── test_utils.h      # Testing utility function declarations
-│   ├── test_files.h      # Test file definitions
-│   └── cosmetics.h       # UI element function declarations
-├── helpers/              # Implementation files
-│   ├── globals.c         # Global variable definitions
-│   ├── test_utils.c      # Testing utility functions
-│   ├── test_files.c      # Test file array implementation
-│   └── cosmetics_utils.c # UI element implementations
-├── programs/             # Main program files
-│   ├── main.c            # Main program for mandatory part
-│   └── main_bonus.c      # Main program for bonus part
-├── test_cases/           # Test input files
-├── expected_output/      # Expected output files
-├── outputs/              # Directory for test outputs
-└── Makefile              # Build system
+### 1. Clone the Repository
+
+```sh
+cd <path_to_project_root>
+git clone <repository_url>
+cd gnl_tester
 ```
 
-## How the Tester Works
+### 2. Compile the Tester
 
-### Testing Framework
+Use the provided Makefile to compile the tester:
 
-1. **File Comparison**: The core testing mechanism reads each test file with `get_next_line()`, writes the output to a temporary file, and compares it with the expected output.
-
-2. **Progress Tracking**: For real-time progress monitoring, the tester keeps track of completed tests and total tests.
-
-3. **Multithreading**: In "short" mode, an animation thread runs parallel to the testing thread, providing a real-time progress bar.
-
-4. **Buffer Size Testing**: The tester automatically runs tests with multiple BUFFER_SIZE values (from 1 to 1048576) to ensure your implementation works correctly regardless of buffer size.
-
-### Testing Modes
-
-The tester offers two main modes:
-
-- **Detailed Mode**: Shows results for each individual test file, perfect for debugging.
-- **Short Mode**: Displays an animated progress bar, ideal for quick verification.
-
-### Bonus Testing
-
-The bonus tester specifically checks if your implementation can handle multiple file descriptors simultaneously, which is the key requirement of the bonus part.
-
-## How to Use
-
-### Installation
-
-1. Clone this repository near your get_next_line implementation:
-
-```bash
-git clone https://github.com/yourusername/gnlTester.git
-```
-
-2. Make sure your get_next_line files are in the parent directory or update the GNL_PATH in the Makefile.
-
-### Running Tests
-
-**Basic Usage**:
-
-```bash
-# Compile the tester
+```sh
+# Compile all functions in NORMAL mode
 make
 
-# Run tests with detailed output
-./tester detailed
+# Compile all functions in STRICT mode
+make MODE=strict
+```
 
-# Run tests with animated progress bar
+### 3. Run the Tests
+
+After compilation, execute the following commands to run the tests:
+
+```sh
+# Run mandatory part
+test make m
+
+# Run bonus part
+make b
+
+#I advice you to use the program you have currently two mode
+# short
+# detailed
 ./tester short
+./tester_bonus short 
+# or
+./tester detailed
+./tester_bonus detailed
 
-# Run bonus tests
-./tester_bonus
 ```
 
-**Custom Buffer Size Testing**:
+The tester will execute multiple test cases with different buffer sizes and display the results.
+### `./tester short`
+![image](https://github.com/user-attachments/assets/a8fb9a27-5835-4abe-9c1a-b41c43c55898)
+### `./tester detailed`
+![image](https://github.com/user-attachments/assets/0c35f808-0438-4cb6-92eb-667491395fb8)
+> and globally it does the same with the bonus version
+### `when you compile it has this behavior`
+![image](https://github.com/user-attachments/assets/db752624-1b56-4fc1-8326-78ee40ff74bc)
 
-You can test a specific BUFFER_SIZE by recompiling with the flag:
+## Test Cases
 
-```bash
-gcc -D BUFFER_SIZE=42 -o tester main.o test_utils.o helpers/globals.o helpers/test_files.o helpers/cosmetics_utils.o ../get_next_line.c ../get_next_line_utils.c
-./tester
+The `test_cases` directory includes various test cases, each with a corresponding expected output file in `expected_output`. The tester compares your `get_next_line` function’s output against these files to determine pass or fail status.
+
+## Program Examples
+
+To see how `get_next_line` should behave, refer to the `examples` directory. It contains sample programs demonstrating how to test different buffer sizes and scenarios.
+
+## Custom Tests
+
+To add your own test cases, place input files in the `test_cases` directory and their corresponding expected output files in `expected_output`. The tester will automatically include them in the test run.
+
+## Cleaning Up
+
+To remove compiled binaries and object files, run:
+
+```sh
+make fclean
 ```
-
-### Adding Custom Tests
-
-1. Add your test input file to `test_cases/`
-2. Create the expected output file in `expected_output/` with the same name
-3. Add the file pair to the TEST_FILES array in `helpers/test_files.c`
-
-## Implementation Details
-
-### Thread-Safe Progress Tracking
-
-The tester uses mutex locks to ensure thread-safe updates to the progress counters:
-
-```c
-pthread_mutex_lock(&progress_mutex);
-completed_tests++;
-pthread_mutex_unlock(&progress_mutex);
-```
-
-### Animation System
-
-The animation system uses ANSI escape codes for terminal control:
-- Carriage return (`\r`) for updating the same line
-- Color codes for visual distinction
-- Unicode characters for smooth visual elements
-
-### Test Validation
-
-Tests are validated by comparing files byte-by-byte, with special handling for different line ending styles:
-
-```c
-int compare_files(const char *file1, const char *file2) {
-    // Reads both files character by character
-    // Handles different line endings (LF vs CRLF)
-    // Returns 1 on match, 0 on mismatch
-}
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Missing GNL Files**: Ensure your get_next_line implementation is in the parent directory or update GNL_PATH in the Makefile.
-
-2. **Compilation Errors**: Make sure your get_next_line compiles without warnings using the same flags.
-
-3. **Test Failures**: Check the specific failing test cases in detailed mode to understand what's wrong.
-
-### Debugging Tips
-
-- **Memory Leaks**: Run the tester with Valgrind to check for memory leaks.
-- **Line Ending Issues**: If you're working across different OSes, be careful with line endings.
-- **Edge Cases**: Pay special attention to empty files, files ending without newlines, and very large files.
 
 ## License
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
 
-This project is available under the MIT License.
-
-## Acknowledgements
-
-- Thanks to the 42 community for inspiration and test cases
-- Special thanks to contributors who helped improve this tester
+Happy testing!
