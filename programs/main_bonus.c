@@ -106,6 +106,60 @@ void test_file(const char *filename, const char *expected_output_file, bool *all
     }
 }
 
+/*
+    Test invalid buffer size
+
+*/
+
+
+
+
+
+
+
+
+void test_invalid_buffer_size(size_t buffer_size, bool *all_tests_passed, bool detailed)
+{
+    if (detailed) printf("\nTesting invalid BUFFER_SIZE = %zu\n", buffer_size);
+    
+    // Create a simple test file
+    const char *filename = "test_cases/simple_test.txt";
+    
+    int fd = open(filename, O_RDONLY);
+    if (fd == -1) {
+        *all_tests_passed = false;
+        if (detailed) printf("❌ Error opening file: %s\n", filename);
+        return;
+    }
+    
+    char *line = get_next_line(fd);
+    
+    if (line == NULL) {
+        if (detailed) printf(GREEN "✅ get_next_line correctly returned NULL with BUFFER_SIZE = %zu\n" RESET, buffer_size);
+    } else {
+        *all_tests_passed = false;
+        if (detailed) {
+            printf(RED "❌ get_next_line did not return NULL with BUFFER_SIZE = %zu\n" RESET, buffer_size);
+            printf("Returned: %s\n", line);
+            free(line);
+        }
+    }
+    close(fd);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Update function declaration to use proper C99 style with (void)
 void test_multiple_fds(void)
 {
@@ -292,9 +346,8 @@ void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool
 
     size_t num_tests = sizeof(test_files) / sizeof(test_files[0]);
 
-    for (size_t i = 0; i < num_tests; i++) {
+    for (size_t i = 0; i < num_tests; i++)
         test_file(test_files[i][0], test_files[i][1], all_tests_passed, detailed);
-    }
 }
 int main(int argc, char **argv)
 {
@@ -302,7 +355,8 @@ int main(int argc, char **argv)
     bool detailed = true;
     
     // Parse command line arguments
-    if (argc != 2) {
+    if (argc != 2)
+    {
         printf(RED "Usage: %s [detailed/short]" RESET "\n", argv[0]);
         return 1;
     }
@@ -328,7 +382,7 @@ int main(int argc, char **argv)
     display_start_message();
     printf("DEBUG: Start message displayed!\n");
 
-    //size_t buffer_sizes[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
+    size_t buffer_sizes[] = {-1, 0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
     bool all_tests_passed = true;
 
     printf("DEBUG: Creating simple test file...\n");
@@ -351,12 +405,10 @@ int main(int argc, char **argv)
     run_tests_with_buffer_size(42, &all_tests_passed, detailed);
     
     printf("DEBUG: Tests completed. Display results...\n");
-    if (all_tests_passed) {
+    if (all_tests_passed)
         display_success_message();
-    } else {
-        display_failure_message();
-    }
-    
+    else
+        display_failure_message();   
     printf("DEBUG: Tester completed!\n");
     return 0;
 }

@@ -284,7 +284,7 @@ void run_tests_with_buffer_size(size_t buffer_size, bool *all_tests_passed, bool
 
 int main(int argc, char **argv) {
     bool detailed = true;
-    size_t buffer_sizes[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
+    size_t buffer_sizes[] = {0,-1, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
     size_t num_buffer_sizes = sizeof(buffer_sizes) / sizeof(buffer_sizes[0]);
     bool all_tests_passed = true;
     

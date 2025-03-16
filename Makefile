@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dlesieur <dlesieur@student.42madrid.com    +#+  +:+       +#+         #
+#    By: syzygy <syzygy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/27 20:41:02 by dyl-syzygy        #+#    #+#              #
-#    Updated: 2025/03/04 21:26:24 by dlesieur         ###   ########.fr        #
+#    Updated: 2025/03/16 01:11:50 by syzygy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ AUTHOR = dlesieur
 DATE = 25/02/2025
 GNL_PATH = ../
 
-BUFFER_SIZES = 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072 262144 524288 1048576
+BUFFER_SIZES = -1 0 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536 131072 262144 524288 1048576
 
 COM_COLOR   = \033[0;34m
 OBJ_COLOR   = \033[0;36m
@@ -198,7 +198,8 @@ m: tester
 
 
 b: tester_bonus
-	@./tester_bonus detailed
+	@ASAN_OPTIONS=detect_leaks=0 strace -e read -o strace_log ./tester_bonus detailed >/dev/tty
+	@grep -q 'read(.*, 0)' strace_log && { echo "Error: read with buffer size 0 detected!"; exit 1;} || true
 
 run_all: m b
 
